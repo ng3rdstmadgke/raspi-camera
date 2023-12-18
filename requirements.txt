@@ -1,0 +1,9 @@
+# OpenCV
+python3-opencv
+opencv-data
+
+# TensorFlow Lite
+tflite-runtime
+
+# FFmpeg
+ffmpeg
