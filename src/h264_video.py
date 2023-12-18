@@ -3,7 +3,7 @@ from datetime import datetime
 import os
 from time import sleep
 
-from picamera2 import Picamera2
+from picamera2 import Picamera2, Preview
 from picamera2.encoders import H264Encoder, Quality
 from libcamera import controls
 
@@ -19,7 +19,9 @@ picam2.start_encoder(
     output=os.path.join(project_dir, f"output/{now}.h264"),
     quality=Quality.MEDIUM,
 )
-picam2.start(show_preview=True)
+picam2.start_preview(Preview.QTGL)
+picam2.start()
+#picam2.start(show_preview=True)
 
 picam2.set_controls({
     # Appendix C: Camera controles (https://datasheets.raspberrypi.com/camera/picamera2-manual.pdf)
