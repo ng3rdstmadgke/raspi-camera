@@ -6,7 +6,7 @@ SCRIPT_DIR=$(cd $(dirname $0); pwd)
 PROJECT_ROOT=$(cd $SCRIPT_DIR/..; pwd)
 cd $PROJECT_ROOT
 
-mkdir -p $PROJECT_ROOT/output/jpg/
+mkdir -p $PROJECT_ROOT/output
 DATETIME=$(date '+%Y%m%d_%H%M%S')
 
 # https://www.raspberrypi.com/documentation/computers/camera_software.html#rpicam-vid
