@@ -11,5 +11,7 @@ DATETIME=$(date '+%Y%m%d_%H%M%S')
 # https://www.raspberrypi.com/documentation/computers/camera_software.html#rpicam-jpeg
 rpicam-jpeg \
   --hdr \
-  -t 5000 \
-  -o $PROJECT_ROOT/output/$DATETIME.jpg
+  --width 4608 \
+  --height 2592 \
+  --timeout 5000 \
+  --output $PROJECT_ROOT/output/$DATETIME.jpg
