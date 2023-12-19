@@ -15,6 +15,12 @@ now = datetime.now().strftime("%Y%m%d_%H%M%S")
 # Picamera2がnewされると preview_configuration, still_configuration, video_configuration の３つの組み込み設定オブジェクトが初期化される
 picam2 = Picamera2()
 
+# センサーのデバッグ
+# print(picam2.sensor_modes)
+# print(picam2.sensor_resolution)
+# print(picam2.sensor_format)
+
+
 # --- --- --- カメラコントロール --- --- ---
 # # Appendix C: Camera controles (https://datasheets.raspberrypi.com/camera/picamera2-manual.pdf)
 picam2.set_controls({
@@ -52,12 +58,12 @@ picam2.start(config="preview", show_preview=True)
 sleep(5)
 
 # --- --- --- スチル撮影 --- --- ---
-# 設定を still に切り替える。 (ここで still_configuration を参照するようになる)
+# still_configuration を設定として参照するように切り替える
 picam2.switch_mode("still")
 # スチル撮影
 output = os.path.join(project_dir, f"output/{now}.jpg")
 res = picam2.capture_file(file_output=output)
 print(json.dumps(res, indent=2, ensure_ascii=False))
 
-# クローズ
+# --- --- --- クローズ --- --- ---
 picam2.close()
