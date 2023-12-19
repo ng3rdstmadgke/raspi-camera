@@ -23,4 +23,6 @@ rpicam-vid \
   --timeout 10000 \
   --bitrate 5000000 \
   --flicker-period 10000 \
+  --metering spot \
+  --autofocus-mode continuous \
   --output $PROJECT_ROOT/output/$DATETIME.h264

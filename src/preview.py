@@ -1,3 +1,7 @@
+# Picamera2 Document:
+#   GitHub: https://github.com/raspberrypi/picamera2
+#   PDF: https://datasheets.raspberrypi.com/camera/picamera2-manual.pdf
+
 from picamera2 import Picamera2, Preview
 from libcamera import controls
 from time import sleep
@@ -5,6 +9,7 @@ from time import sleep
 picam2 = Picamera2()
 
 picam2.set_controls({
+    # NOTE: AF関連の設定値は今のところ動いていないっぽい
     "AfMode": controls.AfModeEnum.Continuous,
     "AfRange": controls.AfRangeEnum.Full,
     "AfSpeed": controls.AfSpeedEnum.Fast,

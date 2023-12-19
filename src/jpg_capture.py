@@ -1,5 +1,6 @@
-# Capture a JPEG while still running in the preview mode. When you
-# capture to a file, the return value is the metadata for that image.
+# Picamera2 Document:
+#   GitHub: https://github.com/raspberrypi/picamera2
+#   PDF: https://datasheets.raspberrypi.com/camera/picamera2-manual.pdf
 
 import json
 from datetime import datetime

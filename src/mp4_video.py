@@ -1,8 +1,10 @@
-#!/usr/bin/python3
+# Picamera2 Document:
+#   GitHub: https://github.com/raspberrypi/picamera2
+#   PDF: https://datasheets.raspberrypi.com/camera/picamera2-manual.pdf
+
 from datetime import datetime
 import os
 from time import sleep
-
 from picamera2 import Picamera2, Preview
 from picamera2.encoders import H264Encoder, LibavH264Encoder
 from picamera2.outputs import FfmpegOutput
@@ -23,6 +25,7 @@ picam2 = Picamera2()
 # # Appendix C: Camera controles (https://datasheets.raspberrypi.com/camera/picamera2-manual.pdf)
 picam2.set_controls({
     # オートフォーカスモード
+    # NOTE: AF関連の設定値は今のところ動いていないっぽい
     "AfMode": controls.AfModeEnum.Auto, # Auto, Continuous, Manual
     # マルチパターン測光?
     "AeMeteringMode": controls.AeMeteringModeEnum.Matrix, # CenterWeighted, Matrix, Spot
@@ -52,25 +55,17 @@ picam2.video_configuration.buffer_count = 6
 # print(picam.still_configuration)
 
 # --- --- --- プレビュー --- --- ---
-# プレビュー開始 (configには preview, still, video が設定可能)
-picam2.start(config="preview", show_preview=True)
+# プレビュー開始 (preiew= False or True or Previewオブジェクト)
+picam2.start_preview(preview=Preview.QTGL)
 
 # --- --- --- ビデオ撮影 --- --- ---
-# video_configuration を設定として参照するように切り替える
-picam2.switch_mode("video")
-
 encoder = H264Encoder(bitrate=5000000, framerate=30)
-#encoder = LibavH264Encoder(bitrate=5000000, framerate=30)
 output = os.path.join(project_dir, f"output/{now}.mp4")
 ffmpeg_output = FfmpegOutput(output_filename=output, audio=False)
-picam2.start_encoder(
+picam2.start_recording(
     encoder=encoder,
     output=ffmpeg_output,
+    config="video",
 )
-picam2.start()
 sleep(15)
-picam2.stop()
-picam2.stop_encoder()
-
-# --- --- --- クローズ --- --- ---
-picam2.close()
+picam2.stop_recording()
