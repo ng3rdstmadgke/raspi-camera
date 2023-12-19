@@ -1,13 +1,15 @@
 #!/bin/bash
-set - e
+set -e
 
 SCRIPT_DIR=$(cd $(dirname $0); pwd)
 PROJECT_ROOT=$(cd $SCRIPT_DIR/..; pwd)
 cd $PROJECT_ROOT
 
-mkdir -p $PROJECT_ROOT/output/jpg/
+mkdir -p $PROJECT_ROOT/output
 DATETIME=$(date '+%Y%m%d_%H%M%S')
+
+# https://www.raspberrypi.com/documentation/computers/camera_software.html#rpicam-jpeg
 rpicam-jpeg \
   --hdr \
-  -t 10 \
+  -t 5000 \
   -o $PROJECT_ROOT/output/$DATETIME.jpg
