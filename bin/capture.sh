@@ -9,8 +9,9 @@ mkdir -p $PROJECT_ROOT/output
 DATETIME=$(date '+%Y%m%d_%H%M%S')
 
 # https://www.raspberrypi.com/documentation/computers/camera_software.html#rpicam-jpeg
+# 利用可能な解像度の確認: rpicam-hello --list-cameras
+#  --hdr \
 rpicam-jpeg \
-  --hdr \
   --width 4608 \
   --height 2592 \
   --timeout 5000 \
