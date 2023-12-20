@@ -1,9 +1,5 @@
-#!/usr/bin/python3
-
 from datetime import datetime
 import os
-# picamera2: https://github.com/raspberrypi/picamera2
-# documentation
 from picamera2 import Picamera2
 from libcamera import controls
 from picamera2.encoders import Quality
@@ -11,6 +7,7 @@ from picamera2.encoders import Quality
 project_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 now = datetime.now().strftime("%Y%m%d_%H%M%S")
 
+# picamera2: https://github.com/raspberrypi/picamera2
 picam2 = Picamera2()
 
 # --- --- --- カメラ設定 --- --- ---

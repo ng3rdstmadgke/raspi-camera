@@ -1,7 +1,3 @@
-# Picamera2 Document:
-#   GitHub: https://github.com/raspberrypi/picamera2
-#   PDF: https://datasheets.raspberrypi.com/camera/picamera2-manual.pdf
-
 import json
 from datetime import datetime
 import os
@@ -13,6 +9,9 @@ from libcamera import controls
 project_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 now = datetime.now().strftime("%Y%m%d_%H%M%S")
 
+# Picamera2 Document:
+#   GitHub: https://github.com/raspberrypi/picamera2
+#   PDF: https://datasheets.raspberrypi.com/camera/picamera2-manual.pdf
 picam2 = Picamera2()
 
 # --- --- --- カメラ設定 --- --- ---
