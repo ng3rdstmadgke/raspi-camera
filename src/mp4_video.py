@@ -26,7 +26,7 @@ picam2 = Picamera2()
 picam2.set_controls({
     # オートフォーカスモード
     # NOTE: AF関連の設定値は今のところ動いていないっぽい
-    "AfMode": controls.AfModeEnum.Auto, # Auto, Continuous, Manual
+    "AfMode": controls.AfModeEnum.Continuous, # Auto, Continuous, Manual
     # マルチパターン測光?
     "AeMeteringMode": controls.AeMeteringModeEnum.Matrix, # CenterWeighted, Matrix, Spot
     # フリッカー低減モード

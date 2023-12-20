@@ -6,21 +6,14 @@
 
 # カメラの映像をデスクトップに表示する
 # Install GStreamer 1.18 on Raspberry Pi 4.: https://qengineering.eu/install-gstreamer-1.18-on-raspberry-pi-4.html
-gst-launch-1.0 libcamerasrc auto-focus-mode=on ! \
-  video/x-raw, width=1920, height=1080, framerate=30/1 ! \
-  videoconvert ! \
-  videoscale ! \
-  clockoverlay time-format="%D %H:%M:%S" ! \
-  autovideosink
-
-exit
-
-# kvssinkインストール時に設定する環境変数
-export GST_PLUGIN_PATH=~/amazon-kinesis-video-streams-producer-sdk-cpp/build
-export AWS_DEFAULT_REGION=ap-northeast-1
-#export AWS_ACCESS_KEY_ID=xxxxxxxxxxxxxxxxxxxx
-#export AWS_SECRET_ACCESS_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-export KVS_STREAM_NAME=test
+#gst-launch-1.0 libcamerasrc ! \
+#  video/x-raw, width=1920, height=1080, framerate=30/1 ! \
+#  videoconvert ! \
+#  videoscale ! \
+#  clockoverlay time-format="%D %H:%M:%S" ! \
+#  autovideosink
+#
+#exit
 
 # カメラの映像をKVSに送信する
 # kvssinkのインストール
@@ -32,9 +25,13 @@ export KVS_STREAM_NAME=test
 #   https://docs.aws.amazon.com/ja_jp/kinesisvideostreams/latest/dg/examples-gstreamer-plugin.html#examples-gstreamer-plugin-launch
 # kvssinkのパラメータ
 #   https://docs.aws.amazon.com/ja_jp/kinesisvideostreams/latest/dg/examples-gstreamer-plugin-parameters.html
-gst-launch-1.0 libcamerasrc auto-focus-mode=on ! \
+
+KVS_STREAM_NAME="test"
+gst-launch-1.0 libcamerasrc ! \
   video/x-raw,width=1920,height=1080,framerate=30/1,format=I420 !\
   videoconvert !\
+  videoscale ! \
+  clockoverlay time-format="%D %H:%M:%S" ! \
   v4l2h264enc extra-controls="controls,repeat_sequence_header=1" !\
   video/x-h264,level='(string)4' !\
   h264parse !\

@@ -26,7 +26,7 @@ picam2 = Picamera2()
 # # Appendix C: Camera controles (https://datasheets.raspberrypi.com/camera/picamera2-manual.pdf)
 picam2.set_controls({
     # オートフォーカスモード
-    "AfMode": controls.AfModeEnum.Auto, # Auto, Continuous, Manual
+    "AfMode": controls.AfModeEnum.Continuous, # Auto, Continuous, Manual
     # マルチパターン測光?
     "AeMeteringMode": controls.AeMeteringModeEnum.Matrix, # CenterWeighted, Matrix, Spot
     # フリッカー低減モード
