@@ -30,10 +30,12 @@ camera_controls = {
 
 preview_config = picam2.create_preview_configuration(
     main={"size":(1920, 1080)},
+    buffer_count=4,
     controls=camera_controls,
 )
-#picam2.configure(preview_config)
-#picam2.start_preview(Preview.QTGL)
-picam2.start(config=preview_config, show_preview=True)
+# NOTE: startメソッドはconfigure, start_previewをまとめたもの
+# 下記は picam2.start(config=preview_config, show_preview=True) と同じ
+picam2.configure(preview_config)
+picam2.start_preview(Preview.QTGL)
 
 sleep(1000)
