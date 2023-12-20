@@ -39,20 +39,20 @@ picam2.set_controls({
     # ちなみにソフトウェア HDR の機能は存在するが、ほぼほぼラズパイ5にならないと使えない
 })
 # デバッグ
-# print(json.dumps(picam.camera_controls, indent=2))
+# print(json.dumps(picam2.camera_controls, indent=2))
 
 # --- --- --- 設定 --- --- ---
 # 4.3. Configuration objects: (https://datasheets.raspberrypi.com/camera/picamera2-manual.pdf)
 # プレビュー設定
 picam2.preview_configuration.size = (1920, 1080)
 # デバッグ
-# print(picam.preview_configuration)
+# print(picam2.preview_configuration)
 
 # ビデオ設定
 picam2.video_configuration.size = (1920, 1080)
 picam2.video_configuration.buffer_count = 6
 # デバッグ
-# print(picam.still_configuration)
+# print(picam2.still_configuration)
 
 # --- --- --- プレビュー --- --- ---
 # プレビュー開始 (preiew= False or True or Previewオブジェクト)

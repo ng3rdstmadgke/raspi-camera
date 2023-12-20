@@ -21,6 +21,26 @@ picam2 = Picamera2()
 # print(picam2.sensor_resolution)
 # print(picam2.sensor_format)
 
+# デバッグ
+# print(json.dumps(picam2.camera_controls, indent=2))
+
+# --- --- --- 設定 --- --- ---
+# 4.3. Configuration objects: (https://datasheets.raspberrypi.com/camera/picamera2-manual.pdf)
+# プレビュー設定
+picam2.preview_configuration.size = (1920, 1080)
+# デバッグ
+# print(picam2.preview_configuration)
+
+# ビデオ設定
+picam2.video_configuration.size = (1920, 1080)
+picam2.video_configuration.buffer_count = 6
+# デバッグ
+# print(picam2.still_configuration)
+
+# --- --- --- プレビュー --- --- ---
+# プレビュー開始 (preiew= False or True or Previewオブジェクト)
+picam2.start_preview(preview=Preview.QTGL)
+
 # --- --- --- カメラコントロール --- --- ---
 # # Appendix C: Camera controles (https://datasheets.raspberrypi.com/camera/picamera2-manual.pdf)
 picam2.set_controls({
@@ -38,25 +58,6 @@ picam2.set_controls({
     #   - 無効化: v4l2-ctl --set-ctrl wide_dynamic_range=0 -d /dev/v4l-subdev0
     # ちなみにソフトウェア HDR の機能は存在するが、ほぼほぼラズパイ5にならないと使えない
 })
-# デバッグ
-# print(json.dumps(picam.camera_controls, indent=2))
-
-# --- --- --- 設定 --- --- ---
-# 4.3. Configuration objects: (https://datasheets.raspberrypi.com/camera/picamera2-manual.pdf)
-# プレビュー設定
-picam2.preview_configuration.size = (1920, 1080)
-# デバッグ
-# print(picam.preview_configuration)
-
-# ビデオ設定
-picam2.video_configuration.size = (1920, 1080)
-picam2.video_configuration.buffer_count = 6
-# デバッグ
-# print(picam.still_configuration)
-
-# --- --- --- プレビュー --- --- ---
-# プレビュー開始 (preiew= False or True or Previewオブジェクト)
-picam2.start_preview(preview=Preview.QTGL)
 
 # --- --- --- ビデオ撮影 --- --- ---
 encoder = H264Encoder(bitrate=5000000, framerate=30)

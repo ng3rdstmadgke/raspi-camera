@@ -27,7 +27,7 @@
 #   https://docs.aws.amazon.com/ja_jp/kinesisvideostreams/latest/dg/examples-gstreamer-plugin-parameters.html
 
 KVS_STREAM_NAME="test"
-gst-launch-1.0 libcamerasrc ! \
+gst-launch-1.0 libcamerasrc auto-focus-mode=on ! \
   video/x-raw,width=1920,height=1080,framerate=30/1,format=I420 !\
   videoconvert !\
   videoscale ! \
