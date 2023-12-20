@@ -8,21 +8,32 @@ from libcamera import controls
 from time import sleep
 
 picam2 = Picamera2()
-picam2.preview_configuration.size = (1920, 1080)
 
-picam2.start("preview", show_preview=True)
-picam2.set_controls({
-    # NOTE: AF関連の設定値は今のところ動いていないっぽい
+camera_controls = {
+    # AF設定
     "AfMode": controls.AfModeEnum.Continuous,
     "AfSpeed": controls.AfSpeedEnum.Fast,
     # フリッカー低減モード
     "AeFlickerMode": controls.AeFlickerModeEnum.Manual, # manual flicker
     "AeFlickerPeriod": 10000, # 50Hz=10000, 60Hz=8333
     # 測光モード
-    "AeMeteringMode": controls.AeMeteringModeEnum.Spot, # CenterWeighted, Matrix, Spot
+    "AeMeteringMode": controls.AeMeteringModeEnum.Matrix, # CenterWeighted, Matrix, Spot
     # オートホワイトバランス
     "AwbEnable": True, # True or False
     "AwbMode": controls.AwbModeEnum.Indoor # Auto, Indoor, Daylight, Cloudy
-})
-#print(json.dumps(picam2.camera_controls, indent=2))
+    # HDR
+    # Picamera2では、RaspberryPiカメラモジュール3のハードウェアHDRをサポートしていないため、有効・無効の切り替えは外部コマンドで行う
+    # ちなみにソフトウェアHDRの機能は存在するが、ラズパイ5にならないと使えない
+    #   - 有効化: v4l2-ctl --set-ctrl wide_dynamic_range=1 -d /dev/v4l-subdev0
+    #   - 無効化: v4l2-ctl --set-ctrl wide_dynamic_range=0 -d /dev/v4l-subdev0
+}
+
+preview_config = picam2.create_preview_configuration(
+    main={"size":(1920, 1080)},
+    controls=camera_controls,
+)
+#picam2.configure(preview_config)
+#picam2.start_preview(Preview.QTGL)
+picam2.start(config=preview_config, show_preview=True)
+
 sleep(1000)
