@@ -9,6 +9,12 @@ from time import sleep
 
 picam2 = Picamera2()
 
+# センサーのデバッグ
+# print(picam2.sensor_modes)
+# print(picam2.sensor_resolution)
+# print(picam2.sensor_format)
+
+# --- --- --- カメラ設定 --- --- ---
 camera_controls = {
     # AF設定
     "AfMode": controls.AfModeEnum.Continuous,
@@ -28,14 +34,19 @@ camera_controls = {
     #   - 無効化: v4l2-ctl --set-ctrl wide_dynamic_range=0 -d /dev/v4l-subdev0
 }
 
+# NOTE: create_*_configurationは色々と状態を変更しているので使う直前に呼び出す
+#       https://github.com/raspberrypi/picamera2/blob/main/picamera2/picamera2.py#L668
 preview_config = picam2.create_preview_configuration(
     main={"size":(1920, 1080)},
     buffer_count=4,
     controls=camera_controls,
 )
-# NOTE: startメソッドはconfigure, start_previewをまとめたもの
-# 下記は picam2.start(config=preview_config, show_preview=True) と同じ
-picam2.configure(preview_config)
-picam2.start_preview(Preview.QTGL)
+
+# NOTE: configを適用して、プレビューを起動して、カメラを起動
+#       https://github.com/raspberrypi/picamera2/blob/main/picamera2/picamera2.py#L1129
+picam2.start(config=preview_config, show_preview=True)
 
 sleep(1000)
+
+# --- --- --- クローズ --- --- ---
+picam2.close()

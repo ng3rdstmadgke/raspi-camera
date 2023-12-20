@@ -13,58 +13,59 @@ from libcamera import controls
 project_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 now = datetime.now().strftime("%Y%m%d_%H%M%S")
 
-# Picamera2がnewされると preview_configuration, still_configuration, video_configuration の３つの組み込み設定オブジェクトが初期化される
 picam2 = Picamera2()
 
-# センサーのデバッグ
-# print(picam2.sensor_modes)
-# print(picam2.sensor_resolution)
-# print(picam2.sensor_format)
-
-
-# --- --- --- カメラコントロール --- --- ---
-# # Appendix C: Camera controles (https://datasheets.raspberrypi.com/camera/picamera2-manual.pdf)
-picam2.set_controls({
-    # オートフォーカスモード
-    "AfMode": controls.AfModeEnum.Continuous, # Auto, Continuous, Manual
-    # マルチパターン測光?
-    "AeMeteringMode": controls.AeMeteringModeEnum.Matrix, # CenterWeighted, Matrix, Spot
+# --- --- --- カメラ設定 --- --- ---
+camera_controls = {
+    # AF設定
+    "AfMode": controls.AfModeEnum.Continuous,
+    "AfSpeed": controls.AfSpeedEnum.Fast,
     # フリッカー低減モード
     "AeFlickerMode": controls.AeFlickerModeEnum.Manual, # manual flicker
     "AeFlickerPeriod": 10000, # 50Hz=10000, 60Hz=8333
-    # RaspberryPiカメラモジュール3のハードウェアHDRについて
-    # Picamera2では、ハードウェアHDR機能をサポートしていないため、有効・無効の切り替えは外部コマンドで行う
+    # 測光モード
+    "AeMeteringMode": controls.AeMeteringModeEnum.Matrix, # CenterWeighted, Matrix, Spot
+    # オートホワイトバランス
+    "AwbEnable": True, # True or False
+    "AwbMode": controls.AwbModeEnum.Indoor # Auto, Indoor, Daylight, Cloudy
+    # HDR
+    # Picamera2では、RaspberryPiカメラモジュール3のハードウェアHDRをサポートしていないため、有効・無効の切り替えは外部コマンドで行う
+    # ちなみにソフトウェアHDRの機能は存在するが、ラズパイ5にならないと使えない
     #   - 有効化: v4l2-ctl --set-ctrl wide_dynamic_range=1 -d /dev/v4l-subdev0
     #   - 無効化: v4l2-ctl --set-ctrl wide_dynamic_range=0 -d /dev/v4l-subdev0
-    # ちなみにソフトウェア HDR の機能は存在するが、ほぼほぼラズパイ5にならないと使えない
-})
-# デバッグ
-# print(json.dumps(picam2.camera_controls, indent=2))
+}
 
-# --- --- --- 設定 --- --- ---
-# 4.3. Configuration objects: (https://datasheets.raspberrypi.com/camera/picamera2-manual.pdf)
-# プレビュー設定
-picam2.preview_configuration.size = (2304, 1296)
-# デバッグ
-# print(picam2.preview_configuration)
 
-# スチル設定
-picam2.still_configuration.size = picam2.sensor_resolution
-# デバッグ
-# print(picam2.still_configuration)
+# --- --- --- プレビュー表示 --- --- ---
+# NOTE: create_*_configurationは色々と状態を変更しているので使う直前に呼び出す
+#       https://github.com/raspberrypi/picamera2/blob/main/picamera2/picamera2.py#L668
+preview_config = picam2.create_preview_configuration(
+    main={"size": (2304, 1296)},
+    buffer_count=4,
+    controls=camera_controls,
+)
+# NOTE: configを適用して、プレビューを起動して、カメラを起動
+#       https://github.com/raspberrypi/picamera2/blob/main/picamera2/picamera2.py#L1129
+picam2.start(config=preview_config, show_preview=True)
+sleep(15)
 
-# --- --- --- プレビュー --- --- ---
-# プレビュー開始 (configには preview, still, video が設定可能)
-picam2.start(config="preview", show_preview=True)
-sleep(5)
 
 # --- --- --- スチル撮影 --- --- ---
-# still_configuration を設定として参照するように切り替える
-picam2.switch_mode("still")
-# スチル撮影
-output = os.path.join(project_dir, f"output/{now}.jpg")
-res = picam2.capture_file(file_output=output)
+# NOTE: create_*_configurationは色々と状態を変更しているので使う直前に呼び出す
+#       https://github.com/raspberrypi/picamera2/blob/main/picamera2/picamera2.py#L702
+still_config = picam2.create_still_configuration(
+    main={"size": picam2.sensor_resolution},
+    buffer_count=1,
+    controls=camera_controls,
+)
+# NOTE: switch_mode_and_capture_file は ざっくり stop, configure, start, capture_file をまとめたもの
+#       https://github.com/raspberrypi/picamera2/blob/main/picamera2/picamera2.py#L1386
+res = picam2.switch_mode_and_capture_file(
+    camera_config=still_config,
+    file_output=os.path.join(project_dir, f"output/{now}.jpg")
+)
 print(json.dumps(res, indent=2, ensure_ascii=False))
+
 
 # --- --- --- クローズ --- --- ---
 picam2.close()
