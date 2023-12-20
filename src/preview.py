@@ -15,6 +15,7 @@ picam2 = Picamera2()
 # print(picam2.sensor_format)
 
 # --- --- --- カメラ設定 --- --- ---
+# # Appendix C: Camera controles: https://datasheets.raspberrypi.com/camera/picamera2-manual.pdf
 camera_controls = {
     # AF設定
     "AfMode": controls.AfModeEnum.Continuous,
@@ -37,6 +38,7 @@ camera_controls = {
 # NOTE: create_*_configurationは色々と状態を変更しているので使う直前に呼び出す
 #       https://github.com/raspberrypi/picamera2/blob/main/picamera2/picamera2.py#L668
 preview_config = picam2.create_preview_configuration(
+    # 4.3. Configuration objects: https://datasheets.raspberrypi.com/camera/picamera2-manual.pdf
     main={"size":(1920, 1080)},
     buffer_count=4,
     controls=camera_controls,
